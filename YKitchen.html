@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>Y Kitchen 点餐菜单</title>
+
+<style>
+  :root{
+    --bg:#fff;
+    --accent:#ff8a3d;
+    --muted:#8b8b8b;
+    --card:#fff9f5;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",Arial;background:var(--bg);color:#222;padding-bottom:110px}
+
+  header{
+    position:sticky;top:0;background:#fff;padding:16px 14px;border-bottom:1px solid #f1f1f1;
+    text-align:center;font-weight:700;font-size:18px;
+  }
+
+  .hero{padding:14px;display:flex;align-items:center;gap:12px}
+  .logo{
+    width:64px;height:64px;border-radius:12px;background:#fffaf5;display:flex;align-items:center;justify-content:center;
+    font-weight:800;color:var(--accent);font-size:22px;box-shadow:0 6px 18px rgba(255,138,61,0.08)
+  }
+  .title-area{line-height:1}
+  .title-area .title{font-size:16px;font-weight:700}
+  .title-area .sub{font-size:13px;color:var(--muted);margin-top:4px}
+
+  .container{padding:8px 14px 120px}
+
+  h2{font-size:15px;margin:18px 0 8px;border-left:4px solid var(--accent);padding-left:10px;color:#444}
+
+  .item{
+    display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px;background:#fff;margin-bottom:8px;
+    border:1px solid #fbf1ea;
+  }
+
+  .left{display:flex;flex-direction:column;}
+  .name{font-weight:600}
+
+  .right{display:flex;align-items:center;gap:10px}
+  .price{font-weight:700;color:#333}
+  .add-btn{background:var(--accent);color:#fff;border:0;padding:8px 12px;border-radius:10px;font-weight:600;cursor:pointer}
+
+  /* 底部栏 */
+  #cartBar{
+    position:fixed;left:0;right:0;bottom:0;background:#fff;padding:12px 14px;border-top:1px solid #eee;
+    display:flex;justify-content:space-between;align-items:center;gap:12px;
+    box-shadow:0 -8px 30px rgba(0,0,0,0.04)
+  }
+
+  #orderBtn{background:var(--accent);color:#fff;border:0;padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer}
+
+  footer.note{padding:18px 14px;text-align:center;color:var(--muted);font-size:13px}
+
+  @media(min-width:720px){
+    .container{max-width:720px;margin:0 auto}
+  }
+</style>
+</head>
+
+<body>
+<header>
+  🍽️ Y Kitchen
+</header>
+
+<div class="hero container" style="padding-top:8px;padding-bottom:4px">
+  <div class="logo">YK</div>
+  <div class="title-area">
+    <div class="title">Y Kitchen · 小食专场</div>
+    <div class="sub">点击「加入」把喜欢的加入购物车</div>
+  </div>
+</div>
+
+<div class="container" id="menu">
+  <h2>招牌与小食</h2>
+
+  <div class="item">
+    <div class="left">
+      <div class="name">炸台湾香肠</div>
+      <img src="https://i.imgur.com/QlkUKB0.jpeg" width="200">
+    </div>
+    <div class="right">
+      <div class="price">RM18</div>
+      <button class="add-btn" onclick="addToCart('炸台湾香肠',18)">＋ 加入</button>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="left">
+      <div class="name">南乳炸鸡</div>
+      <img src="https://i.imgur.com/I4VGTvz.jpeg" width="200">
+    </div>
+    <div class="right">
+      <div class="price">RM25</div>
+      <button class="add-btn" onclick="addToCart('南乳炸鸡',25)">＋ 加入</button>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="left">
+      <div class="name">南乳炸花肉</div>
+      <img src="https://i.imgur.com/uUe2CDv.jpeg" width="200">
+    </div>
+    <div class="right">
+      <div class="price">RM28</div>
+      <button class="add-btn" onclick="addToCart('南乳炸花肉',28)">＋ 加入</button>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="left">
+      <div class="name">炸午餐肉</div>
+      <img src="https://i.imgur.com/35y4l7o.jpeg" width="200">
+    </div>
+    <div class="right">
+      <div class="price">RM25</div>
+      <button class="add-btn" onclick="addToCart('炸午餐肉',25)">＋ 加入</button>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="left">
+      <div class="name">Cheese Sausage</div>
+      <img src="https://i.imgur.com/NvJiEB5.jpeg" width="200">
+    </div>
+    <div class="right">
+      <div class="price">RM18</div>
+      <button class="add-btn" onclick="addToCart('Cheese Sausage',18)">＋ 加入</button>
+    </div>
+  </div>
+
+  <footer class="note">💛 谢谢支持 Y Kitchen！</footer>
+</div>
+
+<!-- 底部购物栏 -->
+<div id="cartBar">
+  <div class="left">🛒 共 <b id="count">0</b> 件 · 总价：RM<b id="total">0</b></div>
+
+  <!-- ✔✔ 加上 type="button" 才是你真正需要的修复 -->
+  <button id="orderBtn" type="button" onclick="openOrderForm()">确认下单</button>
+</div>
+
+<!-- 下单 Formspree 表单（默认隐藏） -->
+<div class="container" id="orderSection" style="display:none; padding-top:20px;">
+  <h2>填写下单信息</h2>
+
+  <form action="https://formspree.io/f/xgvrogbv" method="POST">
+    <label>房间号：<br>
+      <input type="text" name="room" required style="padding:8px;width:100%;margin-top:6px;margin-bottom:12px;">
+    </label>
+
+    <!-- 自动填入购物车内容 -->
+    <textarea id="orderField" name="order" style="display:none;"></textarea>
+
+    <button type="submit" style="background:var(--accent);color:#fff;border:0;padding:12px;border-radius:12px;font-weight:700;width:100%;">
+      提交订单（Email）
+    </button>
+  </form>
+</div>
+
+<script>
+/* ---------------------
+   🛒 购物车系统
+---------------------- */
+let cart = [];
+
+function addToCart(name, price){
+  const idx = cart.findIndex(i => i.name === name);
+  if(idx >= 0) cart[idx].qty++;
+  else cart.push({ name, price, qty: 1 });
+  updateCart();
+  alert(`${name} 已加入购物车`);
+}
+
+function updateCart(){
+  let total = 0, count = 0;
+  cart.forEach(i => { total += i.price * i.qty; count += i.qty; });
+
+  document.getElementById('count').innerText = count;
+  document.getElementById('total').innerText = total;
+}
+
+/* 点击确认下单 → 显示表单 & 填入订单 */
+function openOrderForm(){
+  if(cart.length === 0){
+    alert("购物车为空！");
+    return;
+  }
+
+  // 显示隐藏的填写区
+  document.getElementById("orderSection").style.display = "block";
+
+  // 生成订单内容
+  let lines = [];
+  cart.forEach(it => lines.push(`${it.name} x${it.qty}（RM${it.price}）`));
+  const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  lines.push(`总价：RM${total}`);
+  lines.push(`备注：`);
+
+  // 填入隐藏 textarea
+  document.getElementById("orderField").value = lines.join("\n");
+}
+</script>
+
+</body>
+</html>
